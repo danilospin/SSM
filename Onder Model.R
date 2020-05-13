@@ -13,10 +13,10 @@ getwd()
 
 #SETTING THE MODEL
 #print results in a .pdf file? 1 - Yes, 2 - No
-print_results=1 
+print_results=0
 
 #Type of investment equation (Using Labor Pdtv growth (1) or fixed Labor Pdtv (2))
-b0=1 
+b0=2 
 #Type of Model (Labor Constrained (1) or Capital Constrained (2))
 b1=2 
 
@@ -49,6 +49,8 @@ b26=0 #Gov_Autonomous_Spending_Rt	0
 # Declareing vectors
 t0=1
 I=Ir=u=K=D=Y=Ku=sigma=Sc=Sl=M=Khat=a=ahat=e=vector()
+
+Ir[t]=b16+b13*((b14*Ir[t-1]*K[t-1]/(1-b8*(1/(1+M[t-1])))/K[t-1])-b15)+b12*b3
 
 #Initial conditions
 I[t0]=b18*b16
@@ -159,15 +161,14 @@ OnderModel <- function (t, y, parms) {
   with(as.list(y), {
     
     #Differential Equations
-    dK=K*(b16+((b16+b12*b3)*(1-b13*(b14*(K)/(1-b8*(1/(1+M)))/K-b15))^(-1)))
-    dM=M*(b21*(((((b16+b12*b3)* (1-b13*(b14*(K)/(1-b8*(1/(1+M)))/K-b15))^(-1))*K)/(1-b8*(1/(1+M))))/(K/b14)-b22))
-  
-    
-    list(c(dK, dM)) })
+    dK=K*(-b16+g)  
+    dM= M*(b21*(( (g*K)/(1-b8*(1/(1+M))))/(K/b14)-b22))
+    dg= b16+b13*(((b14*g*K)/(1-b8*(1/(1+M)))/K)-b15)+b12*b3-g
+    list(c(dK, dM, dg)) })
 }
 
 #Initial Conditions
-yini <- c(K= 300, M=1)
+yini <- c(K= 300, M=1, g=1)
 
 #Computing the dynamic equation (ODE)
 times <- seq(from = 0, to = 1000, by = 0.1)
@@ -175,5 +176,16 @@ out <- ode(y = yini, times = times, func =OnderModel ,
            parms = NULL)
 par(mar=c(2, 2, 2, 2))
 par(mfrow=c(2, 2))
-plot(out, lwd = 2, main="title")
+
+
+#plot(out, lwd = 2, main="title")
+
+#Correctly graph the equations
+Kvar=out[,2]
+Mvar=out[,3]
+gvar=out[,4]
+
+plot(Kvar, lwd = 2, type='l', main="Capital Stock", xlab="time", ylab="K")
+plot(Mvar, lwd = 2, type='l', main="Mark-Up", xlab="time", ylab="M")
+plot(gvar, lwd = 2, type='l', main="Investment rate", xlab="time", ylab="I")
 
