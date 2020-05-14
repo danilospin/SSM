@@ -13,7 +13,7 @@ getwd()
 
 #SETTING THE MODEL
 #print results in a .pdf file? 1 - Yes, 2 - No
-print_results=0
+print_results=1
 
 #Type of investment equation (Using Labor Pdtv growth (1) or fixed Labor Pdtv (2))
 b0=2 
@@ -50,25 +50,23 @@ b26=0 #Gov_Autonomous_Spending_Rt	0
 t0=1
 I=Ir=u=K=D=Y=Ku=sigma=Sc=Sl=M=Khat=a=ahat=e=vector()
 
-Ir[t]=b16+b13*((b14*Ir[t-1]*K[t-1]/(1-b8*(1/(1+M[t-1])))/K[t-1])-b15)+b12*b3
-
 #Initial conditions
-I[t0]=b18*b16
-Ir[t0]=b16
-K[t0]=b18
-M[t0]=b10
-sigma[t0]=1/(1+M[t0])
-D[t0]=I[t0]/(1-b8*sigma[t0])
-Y[t0]=D[t0]
-Ku[t0]=b14*Y[t0]
-u[t0]=Ku[t0]/K[t0]
-M[2]=M[t0]
-Sc[t0]=K[t0]/b14
-Sl[t0]=a[t0]*b19  
-a[t0]=b2
-Khat[t0]=0
-ahat[t0]=b2
-e[t0]=Y[t0]/(b19*a[t0])
+I[t0]=b18*b16 #Investment
+Ir[t0]=b16 #Investment Rate
+K[t0]=b18 #Actual Capital Stock
+M[t0]=b10 #Mark-up
+sigma[t0]=1/(1+M[t0]) #Wage Share in total income
+D[t0]=I[t0]/(1-b8*sigma[t0]) #Aggregate Demand
+Y[t0]=D[t0] #Total Output
+Ku[t0]=b14*Y[t0] #Capital Stock at full capacity
+u[t0]=Ku[t0]/K[t0] #Utilization capacity
+M[2]=M[t0] 
+Sc[t0]=K[t0]/b14 #Total Supply with capital constraints  
+Sl[t0]=a[t0]*b19 #Total Supply with labor constraints
+a[t0]=b2 #Labor Productivity
+Khat[t0]=0 #Capital stock growth
+ahat[t0]=b2 #Labor productivity growth
+e[t0]=Y[t0]/(b19*a[t0]) #Total Employment
 
 # Dynamic Equations  
 for(t in 2:1000) {
@@ -102,23 +100,22 @@ for(t in 2:1000) {
   e[t]=Y[t]/(b19*a[t])
 }
 
-
 #Graphs
 par(mfrow=c(1,2), mar=c(3.1, 2.9, 2.5, 1), mgp=c(2, 1, 0), las=0, cex.lab=0.7, cex.axis=0.7, cex.main=0.7, cex.sub=0.7)
-#plot( K, type="l", main="Total Capital", xlab="t", ylab="K",col="blue" )
+plot( K, type="l", main="Total Capital", xlab="t", ylab="K",col="blue" )
 plot( Khat, type="l", main="Capital Growth Rate", xlab="t", ylab="Khat",col="blue" )
-#plot( Ku, type="l", main="Used Capital", xlab="t", ylab="Ku",col="blue" )
+plot( Ku, type="l", main="Used Capital", xlab="t", ylab="Ku",col="blue" )
 plot( u, type="l", main="Utilization Capacity", xlab="t", ylab="u",col="blue" )
 plot( M, type="l", main="Mark-up", xlab="t", ylab="M",col="blue" )
 plot( sigma, type="l", main="w/a", xlab="t", ylab="w/a",col="blue" )
 plot( Ir, type="l", main="Investment Rate", xlab="t", ylab="Ir",col="blue" )
-#plot( I, type="l", main="Investment", xlab="t", ylab="I",col="blue" )
-#plot( Sc, type="l", main="A. Supply (Capital)", xlab="t", ylab="Sc",col="blue" )
-#plot( Sl, type="l", main="A. Supply (Labor)", xlab="t", ylab="Sl",col="blue" )
-#plot( D, type="l", main="Aggregate Demand", xlab="t", ylab="D",col="blue" )
+plot( I, type="l", main="Investment", xlab="t", ylab="I",col="blue" )
+plot( Sc, type="l", main="A. Supply (Capital)", xlab="t", ylab="Sc",col="blue" )
+plot( Sl, type="l", main="A. Supply (Labor)", xlab="t", ylab="Sl",col="blue" )
+plot( D, type="l", main="Aggregate Demand", xlab="t", ylab="D",col="blue" )
 plot( D/Sc, type="l", main="Demand/C Supply Ratio", xlab="t", ylab="D/S",col="blue" )
 plot( D/Sl, type="l", main="Demand/L Supply Ratio", xlab="t", ylab="D/S",col="blue" )
-#plot( a, type="l", main="Productivity", xlab="t", ylab="a",col="blue" )
+plot( a, type="l", main="Productivity", xlab="t", ylab="a",col="blue" )
 plot( ahat, type="l", main="Productivity Growth", xlab="t", ylab="ahat",col="blue" )
 plot( e, type="l", main="Employment rate", xlab="t", ylab="e",col="blue" )
 
@@ -131,17 +128,17 @@ pdf("Results_Onder_Model.pdf")
   par(mfrow=c(1,1), mar=c(5.1, 4.1, 4.1, 2.1), lwd = 2, mgp=c(3, 1, 0), las=0, cex.lab=1, cex.axis=1, cex.main=1, cex.sub=1)
   
   #Graphs
-  #plot( K, type="l", main="Total Capital", xlab="t", ylab="K",col="blue" )
+  plot( K, type="l", main="Total Capital", xlab="t", ylab="K",col="blue" )
   plot( Khat, type="l", main="Capital Growth Rate", xlab="t", ylab="Khat",col="blue" )
-  #plot( Ku, type="l", main="Used Capital", xlab="t", ylab="Ku",col="blue" )
+  plot( Ku, type="l", main="Used Capital", xlab="t", ylab="Ku",col="blue" )
   plot( u, type="l", main="Utilization Capacity", xlab="t", ylab="u",col="blue" )
   plot( M, type="l", main="Mark-up", xlab="t", ylab="M",col="blue" )
   plot( sigma, type="l", main="w/a", xlab="t", ylab="w/a",col="blue" )
   plot( Ir, type="l", main="Investment Rate", xlab="t", ylab="Ir",col="blue" )
-  #plot( I, type="l", main="Investment", xlab="t", ylab="I",col="blue" )
-  #plot( Sc, type="l", main="A. Supply (Capital)", xlab="t", ylab="Sc",col="blue" )
-  #plot( Sl, type="l", main="A. Supply (Labor)", xlab="t", ylab="Sl",col="blue" )
-  #plot( D, type="l", main="Aggregate Demand", xlab="t", ylab="D",col="blue" )
+  plot( I, type="l", main="Investment", xlab="t", ylab="I",col="blue" )
+  plot( Sc, type="l", main="A. Supply (Capital)", xlab="t", ylab="Sc",col="blue" )
+  plot( Sl, type="l", main="A. Supply (Labor)", xlab="t", ylab="Sl",col="blue" )
+  plot( D, type="l", main="Aggregate Demand", xlab="t", ylab="D",col="blue" )
   plot( D/Sc, type="l", main="Demand/C Supply Ratio", xlab="t", ylab="D/S",col="blue" )
   plot( D/Sl, type="l", main="Demand/L Supply Ratio", xlab="t", ylab="D/S",col="blue" )
   #plot( a, type="l", main="Productivity", xlab="t", ylab="a",col="blue" )
@@ -162,30 +159,46 @@ OnderModel <- function (t, y, parms) {
     
     #Differential Equations
     dK=K*(-b16+g)  
-    dM= M*(b21*(( (g*K)/(1-b8*(1/(1+M))))/(K/b14)-b22))
-    dg= b16+b13*(((b14*g*K)/(1-b8*(1/(1+M)))/K)-b15)+b12*b3-g
-    list(c(dK, dM, dg)) })
+    dM= M*(b21*((((g*K)/(1-b8*(1/(1+M))))/(K/b14))-b22))
+    dg= b16+b13*((((g*K)/(1-b8*(1/(1+M))))/(K/b14))-b15)+b12*b3-g
+    da=b3+b4*K+b5*((g*K)/(1-b8*(1/(1+M)))/(a*b19)-b6)
+    list(c(dK, dM, dg, da)) })
+
 }
 
 #Initial Conditions
-yini <- c(K= 300, M=1, g=1)
+yini <- c(K=b18, M=b10, g=b16, a=b2)
 
 #Computing the dynamic equation (ODE)
-times <- seq(from = 0, to = 1000, by = 0.1)
+times <- seq(from = 0, to = 100, by = 0.1)
 out <- ode(y = yini, times = times, func =OnderModel ,
            parms = NULL)
 par(mar=c(2, 2, 2, 2))
 par(mfrow=c(2, 2))
 
-
 #plot(out, lwd = 2, main="title")
 
 #Correctly graph the equations
-Kvar=out[,2]
-Mvar=out[,3]
-gvar=out[,4]
+Kde=out[,2]
+Mde=out[,3]
+gde=out[,4]
+ade=out[,5]
 
-plot(Kvar, lwd = 2, type='l', main="Capital Stock", xlab="time", ylab="K")
-plot(Mvar, lwd = 2, type='l', main="Mark-Up", xlab="time", ylab="M")
-plot(gvar, lwd = 2, type='l', main="Investment rate", xlab="time", ylab="I")
+##
+
+Kdehat=(Kde[-1]-Kde[-length(Kde)])/Kde[-length(Kde)]
+Yde=Dde=Kde*gde/(1-b8*(1/(1+Mde)))
+Ydehat=(Yde[-1]-Yde[-length(Yde)])/Yde[-length(Yde)]
+adehat=(ade[-1]-ade[-length(Yde)])/ade[-length(Yde)]
+edehat=Ydehat-adehat
+
+##
+
+plot(Kde, lwd = 2, type='l', main="Capital Stock", xlab="time", ylab="K")
+plot(Mde, lwd = 2, type='l', main="Mark-Up", xlab="time", ylab="M")
+plot(gde, lwd = 2, type='l', main="Investment rate", xlab="time", ylab="Ir")
+plot(adehat, lwd = 2, type='l', main="Productivity growth", xlab="time", ylab="ahat")
+plot(edehat, lwd = 2, type='l', main="Employment growth", xlab="time", ylab="ehat")
+plot(Kdehat, lwd = 2, type='l', main="Capital Stock Growth", xlab="time", ylab="Khat")
+plot(Ydehat, lwd = 2, type='l', main="Output Growth", xlab="time", ylab="Yhat")
 
