@@ -33,7 +33,7 @@ sf=0.4
 gamma=0.014
 h=0.2
 un=0.8
-lambda=lambda0-ir
+lambda=lambda0-ir #proportion of household wealth allocated in equities
 
 #Long-run Variables
 #m_star=l_star=0.7953325
@@ -60,7 +60,7 @@ Vh[t0]=100 #Stock of wealth
 Yd[t0]=(1-tau)*Yh[t0] #Disposable income
 Sh[t0]=Yd[t0]-C[t0] #Household savings
 FU[t0]=0 #Firms retain a fraction of their profit discounting the payment of interest on loans
-M[t0]=10 #Deposits
+M[t0]=10 #Deposit share in wealth
 K[t0]=250 #Capital Stock
 E[t0]=a*K[t0] #Equities
 Yfc[t0]=K[t0]/upsilon  #Full capacity output 
@@ -76,7 +76,7 @@ rg[t0]=pi*u[t0]/upsilon
 gvh[t0]=0.02
 
 # Dynamic Equations  
-for(t in 2:100) 
+for(t in 2:1000) 
   {
   #u[t]=(1/((1+gk[t-1])*(1-h[t]-alfa1*(1-tau)*(1-pi)-(sigma/(1+gy[t-1])))))*alfa2*upsilonh[t-1]*upsilon
   #h[t]=h[t-1]+h[t-1]*gamma*(u[t]-un)
@@ -105,7 +105,10 @@ for(t in 2:100)
   
   #Vh[t]=Vh[t-1]+Sh[t]+E[t-1]#*(pe[t]-pe[t-1])
   
+  #Sh[t]=Yd[t]-C[t]
+  #E[t]=a*K[t-1]
   Vh[t]=((1-(E[t-1]*lambda/E[t]))^(-1))*(Vh[t-1]+Sh[t]-pe[t-1]*E[t-1])
+  
   gvh[t]=(Vh[t]-Vh[t-1])/Vh[t-1]
   pe[t]=lambda*Vh[t]/E[t]
   
@@ -122,8 +125,15 @@ for(t in 2:100)
   gk[t]=(h[t]*u[t]/upsilon)-delta
   gy[t]=(Y[t]-Y[t-1])/Y[t-1]
 
-  u2[t]=(1/((1+gk[t-1])*(1-h[t]-alfa1*(1-tau)*(1-pi)-(sigma/(1+gy[t-1])))))*alfa2*upsilonh[t-1]*upsilon
-
+  ######Dynamic simultaneous system#####
+  
+  #gy[t]=(Y[t]-Y[t-1])/Y[t-1]
+  #gk[t]=(h[t]*u[t]/upsilon)-delta
+  #h[t]=h[t-1]+h[t-1]*gamma*(u[t]-un)
+  #u[t]=(1/((1+gk[t-1])*(1-h[t]-alfa1*(1-tau)*(1-pi)-(sigma/(1+gy[t-1])))))*alfa2*upsilonh[t-1]*upsilon
+  
+  #####################################
+  
   Fe[t]=pi*Y[t]-L[t-1]*ir
   Fg[t]=pi*Y[t]
   #rn[t]=pi*(u[t]/upsilon)-ir*l[t-1]/(1+gk[t-1])

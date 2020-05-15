@@ -1,3 +1,4 @@
+#Hello
 #Onder Model
 
 #Setting the libraries
@@ -170,7 +171,7 @@ OnderModel <- function (t, y, parms) {
 yini <- c(K=b18, M=b10, g=b16, a=b2)
 
 #Computing the dynamic equation (ODE)
-times <- seq(from = 0, to = 100, by = 0.1)
+times <- seq(from = 0, to = 1000, by = 1)
 out <- ode(y = yini, times = times, func =OnderModel ,
            parms = NULL)
 par(mar=c(2, 2, 2, 2))
