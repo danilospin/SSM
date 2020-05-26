@@ -1,6 +1,6 @@
 ############## Labor Market ################# 
-########### Brochier & Silva (2019) ######### 
-###### Cambridge Journal of Economics #######
+############ Brochier (2020) ################
+############# METROECONOMICA ################
 #############################################
 
 #Setting the libraries
@@ -18,37 +18,46 @@ getwd()
 print_results=1
 
 #PARAMETERS
-tau=0.37 #Ratio of taxes on household income
+tau=0.35 #Ratio of taxes on household income
 sigma=0.34 #Share of government expenditures on income
-alfa1=0.8 #Fraction of after-tax wages - households consumption
-alfa2=0.03375 #Fraction of stock of wealth - households consumption
+alpha1=0.8 #Fraction of after-tax wages - households consumption
+alpha2=0.065613 #Fraction of stock of wealth - households consumption
 a=0.1 #Equities are a fixed proportion of the capital stock at the beginning of the period
-x=0.001 #capacity utilization band
-lambda0=0.08 #proportion of household wealth allocated in equities
-pe=0.9880292 #Prices of Equities
-delta=0.044 #Depreciation rate
-ir=0.02 #Interest rate
-upsilon=2.5 #Capital-output ratio
-mu=0.7 #Mark-up
-pi=0.411765 # Profit share
+x=0.0001 #capacity utilization band
+zeta=0.1
+lambda0=0.449901 #proportion of household wealth allocated in equities
+lambda=0.44
+#pe=0.9880292 #Prices of Equities
+delta=0.077 #Depreciation rate
+i=0.0200109
+ir=0.00990099 #Interest rate
+v=1.5
+#upsilon=2.5 #Capital-output ratio
+#mu=0.7 #Mark-up
+pi=0.4444445 # Profit share
 #pi=mu/(1+mu)
-sf=0.4 #Firms retain a fraction of their profit
-gamma=0.014 #Speed of adjustment of the propensity to invest to the discrepancies between the actual utilization rate and the desired utilization rate.
-h=0.2 #Investment rate
-un=0.8 #Natural capacity utilization rate
-lambda=lambda0-ir #proportion of household wealth allocated in equities
-
-#Long-run Variables
-#m_star=l_star=0.7953325
-#b_star=0.7525772
-#upsilonh_star=1.646715
-#g_star=
-#K0=100
+sf=0.3 #Firms retain a fraction of their profit
+gamma=0.05 #Speed of adjustment of the propensity to invest to the discrepancies between the actual utilization rate and the desired utilization rate.
+h=0.18 #Investment rate
+un=0.8499798 #Natural capacity utilization rate
+e=0.8999757
+theta0=-0.065
+theta1=0.1
+eta0=0
+eta1=0
+xi=0
+psi=0.1
+epsilon1=0.5
+epsilon2=0.1
+epsilon3=0
+phi1=0.5
+phi2=0.1
+sf=0.3
 
 # Declaring vectors
 t0=1
-B=G=Y=Te=Yh=W=FD=L=C=I=Vh=Yd=Sh=FU=M=K=E=Yfc=upsilonh=u=gk=h=gy=u2=pe=Fe=Fg=rn=rg=gvh=vector()
-nd=ns=n=beta=betahat=e=ge=w=omegaw=omegaf=omega=phat=gu=What=p=phat=gu=vector()
+B=G=Y=Te=Yh=W=FD=L=C=I=Vh=Yd=Sh=FU=M=K=Eq=Yfc=upsilonh=u=gk=h=gy=u2=pe=Fe=Fg=sh=rn=rg=gvh=y=WB=yh=vh=gns=vector()
+nd=ns=n=beta=betahat=e=ge=w=omegaw=omegaf=omega=phat=gu=Fn=What=p=phat=gu=k=yd=te=yfc=id=gd=c=vector()
 
 
 #Initial conditions
@@ -67,136 +76,128 @@ Sh[t0]=Yd[t0]-C[t0] #Household savings
 FU[t0]=0 #Firms retain a fraction of their profit discounting the payment of interest on loans
 M[t0]=10 #Deposit share in wealth
 K[t0]=250 #Capital Stock
-E[t0]=a*K[t0] #Equities
-Yfc[t0]=K[t0]/upsilon  #Full capacity output 
-upsilonh[t0]=upsilon #normalized household wealth to capital ratio
+Eq[t0]=a*K[t0] #Equities
+Yfc[t0]=K[t0]/v  #Full capacity output 
+#upsilonh[t0]=upsilon #normalized household wealth to capital ratio
 u[t0]=Y[t0]/Yfc[t0] #Capacity utilization rate
 h[t0]=0.2 #Investment rate
 pe[t0]=lambda*Vh[t0]/E[t0] #Price of equities
 gk[t0]=0.2 #Growth of capital stock
 gy[t0]=gk[t0] #Growth of output
 Fg[t0]=pi*Y[t0] #Gross profit
-rg[t0]=pi*u[t0]/upsilon #Net profit rate
+#rg[t0]=pi*u[t0]/upsilon #Net profit rate
 gvh[t0]=0.02 #Growth of wealth
+y[t0]=0.01
+p[t0]=0.01
+k[t0]=0.01
+gd[t0]=0.01
+vh[t0]=0.01
+beta[t0]=0.01
+betahat[t0]=0.02
+I[t0]=30
+What[t0]=0.01
+phat[t0]=0.01
+omegaf[t0]=0.537536
+omegaw[t0]=0.573575
+e[t0]=0.8
+nd[t0]=100
+ns[t0]=100
+gns[t0]=0.2
+yh[t0]=0.01
+WB[t0]=n[t0]*W[t0]
+i[t0]= 0.01 # added
+n[t0]=80 #added
+WB[t0]=n[t0]*W[t0] #added
+c[t0]=C[t0]/p[t0] # added
+yfc[t0]=0.6 # added
+id[t0]=h[t0]*y[t0] # added
+ge[t0]=0.01 # added
+gu[t0]=0.01 # added
+gy[t0]=0.01 # added
+omega[t0] =WB[t0]/Y[t0] # added
+i[t0]= 0.01 # added
+Fn[t0]=10 # added
+te[t0] = 0.1 # added
+yd[t0] = Yd[t0]/p[t0] # added
+sh[t0] = yd[t0]-c[t0] # added
+lambda=lambda0-ir #C18
 
-# Dynamic Equations  
-for(t in 2:1000) 
+for(t in 2:10) 
   {
-  #u[t]=(1/((1+gk[t-1])*(1-h[t]-alfa1*(1-tau)*(1-pi)-(sigma/(1+gy[t-1])))))*alfa2*upsilonh[t-1]*upsilon
-  #h[t]=h[t-1]+h[t-1]*gamma*(u[t]-un)
   
-#I used the LAG to avoid overdetermination - but this is wrong
-  W[t]=(1-pi)*Y[t-1] #used Lag 
-  I[t]=h*Y[t-1] #Double determination, Investment uses lag of income?
-  C[t]=alfa1*(1-tau)*W[t]+alfa2*Vh[t-1]
-  G[t]=sigma*Y[t-1]
-  Y[t]=G[t]+C[t]+I[t]
- #Y[t]=(1/(1-alfa1*(1-tau)*(1-pi)-h[t]))*(sigma*Y[t-1]+alfa2*Vh[t-1]) //Correct according to the paper
- #Y[t]=(1/(1-alfa1*(1-tau)*(1-pi)-h[t]-sigma))*(alfa2*Vh[t-1]) 
+####################################
+  Y[t]=C[t-1]+I[t-1]+G[t-1]
+  p[t]=p[t-1]*(1+phat[t-1]) #C44
+  y[t]=Y[t]/p[t] #probably necessary, but not in the model
+  W[t]=W[t-1]*(1+What[t-1]) #C41
+  beta[t]=beta[t-1]*(1+betahat[t-1]) #C36
+  nd[t]=Y[t]/beta[t] #C33
+  n[t]=nd[t] #C33
+  WB[t]=n[t]*W[t] #C38
+  c[t]=alpha1*(1-tau)*WB[t]/p[t]+alpha2*vh[t-1] #C13
+  C[t]=c[t]*p[t] #C14
+  yfc[t]=k[t-1]/v #C25
   
-  E[t]=a*K[t-1]
-  
-  FU[t]=sf*(pi*Y[t]-ir*L[t-1])
-  L[t]=L[t-1]+I[t]-FU[t]-(E[t]-E[t-1])#*pe[t]
-  FD[t]=(1-sf)*(pi*Y[t]-ir*L[t-1])
-  
-  Yh[t]=W[t]+FD[t]+ir*(B[t-1]+M[t-1])
-  Yd[t]=(1-tau)*Yh[t]
-  Sh[t]=Yd[t]-C[t]
-  
-  K[t]=K[t-1]-delta*K[t-1]+I[t]
-  #gk[t]=(K[t]-K[t-1])/K[t-1]
-  
-  #Vh[t]=Vh[t-1]+Sh[t]+E[t-1]#*(pe[t]-pe[t-1])
-  
-  
-  Vh[t]=((1-(E[t-1]*lambda/E[t]))^(-1))*(Vh[t-1]+Sh[t]-pe[t-1]*E[t-1])
-  
-  gvh[t]=(Vh[t]-Vh[t-1])/Vh[t-1]
-  pe[t]=lambda*Vh[t]/E[t]
-  
-  M[t]=M[t-1]+Sh[t]-(E[t]-E[t-1])*pe
-  
-  Te[t]=tau*Yh[t]
-  B[t]=B[t-1]+G[t]-Te[t]+ir*B[t-1]
-  
-  upsilonh[t]=Vh[t]/K[t-1]
-  
-  Yfc[t]=K[t-1]/upsilon
-  u[t]=Y[t]/Yfc[t]
-  h[t]=h[t-1]+h[t-1]*gamma*(u[t]-un)
-  gk[t]=(h[t]*u[t]/upsilon)-delta
-  gy[t]=(Y[t]-Y[t-1])/Y[t-1]
+  u[t]=y[t]/yfc[t] #C24
+  h[t]=h[t-1]+h[t-1]*gamma*(u[t-1]-un) #C26, I prefer u[t-1], but original is u[t]
+  id[t]=h[t]*y[t] #C21
+  I[t]=id[t]*p[t] #C20
 
-  Fe[t]=pi*Y[t]-L[t-1]*ir
-  Fg[t]=pi*Y[t]
-  #rn[t]=pi*(u[t]/upsilon)-ir*l[t-1]/(1+gk[t-1])
-  rg[t]=pi*u[t]/upsilon
-
-  ############## Labor Market ################# 
-  #####Brochier(2020) in Metroeconomica #######
-  #############################################
-  eta0=0.01
-  eta1=0.01
-  xi=0.01
-  epsilon1=0.1
-  epsilon2=0.1
-  epsilon3=0.1
-  phi1=0.1
-  phi2=0.1
-  psi=0.1
-  theta0=0
-  theta1=0.01
+  gd[t]=y[t-1]*sigma #C1
+  G[t]=gd[t]*p[t] #C3
   
-  beta[t0]=1
-  betahat[t0]=0.02
-  nd[t0]=Y[t0]/beta[t0]
-  nd[t0]=80
-  ns[t0]=100
-  omegaw[t0]=0.7
-  omegaf[t0]=0.6
-  ge[t0]=0.02
-  w[t0]=60 #Wages
-  What[t0]=0.01
-  phat[t0]=0.01
-  p[t0]=100
-  omega[t0]=w[t0]/(beta[t0]*p[t0])
-  e[t0]=0.8  
+  k[t]=k[t-1]+id[t]-delta*k[t-1] #C23
   
-  gn[t0]=theta0+theta1*e[t0]
+  e[t]=nd[t-1]/ns[t-1] #C34
+  ge[t]=(e[t]-e[t-1])/e[t-1] #growth rate
+  omegaw[t]=omegaw[t-1]+xi*ge[t] #C43
+  gu[t]=(u[t]-u[t-1])/u[t-1] #growth rate
+  omegaf[t]=omegaf[t-1]-psi*gu[t] #C46
+  gy[t]=(y[t]-y[t-1])/y[t-1] #growth rate
+  betahat[t]=eta0+eta1*gy[t-1] #C37
+  gns[t]=theta0+theta1*e[t-1] #C35
+  ns[t]=ns[t-1]*(1+gns[t-1]) #implied, but should it be gns[t]?
+  omega[t]=WB[t]/Y[t] #C39
+  
+  What[t]=epsilon1*(omegaw[t]-omega[t])+epsilon2*phat[t-1]+epsilon3*betahat[t] #C42
+  phat[t]=phi1*(omega[t]-omegaf[t])+phi2*(What[t-1]) #C45
+  
+  te[t]=tau*yh[t-1] #C2
+  Te[t]=te[t]*p[t] #C4
+  
+  i[t]=(1+ir)*(1+phat[t])-1 #C6
+  B[t]=B[t-1]+G[t]-Te[t]+i[t]*B[t-1] #C5
+  Fn[t]=Y[t]-WB[t]-i[t]*L[t-1] #C29
+  FD[t]=(1-sf)*Fn[t] #C30
+  Yh[t]=WB[t]+FD[t]+i[t]*(B[t-1]+M[t-1]) #C7
+  yh[t]=Yh[t]/p[t] #C8
+  Yd[t]=(1-tau)*Yh[t] #C9
+  Sh[t]=Yd[t]-C[t] #C11
+  sh[t]=Yd[t]/p[t]-c[t] #C12
+  Eq[t]=zeta*k[t-1] #C32
+  #pe[t]=lambda*Vh[t-1]/Eq[t] #It is Vh[t], but I Vh[t-1]
+  #Vh[t]=Vh[t-1]+Sh[t]+(pe[t]-pe[t-1])*Eq[t-1]
+  Vh[t]=(Vh[t-1]+Sh[t]-pe[t-1]*Eq[t-1])*(1-lambda/Eq[t]*Eq[t-1])^(-1) #C15
+  pe[t]=lambda*Vh[t]/Eq[t] #C19
+  vh[t]=Vh[t]/p[t] #C16
+  K[t]=k[t]*p[t] #C22
+  FU[t]=sf*Fn[t] #C31
+  M[t]=M[t-1]+Sh[t]-pe[t]*(Eq[t]-Eq[t-1])-(B[t]-B[t-1]) #C17
 
-  beta[t]=beta[t-1]*(1+betahat[t-1])
-  betahat[t]=eta0+eta1*gy[t-1]
+  
+  L[t]=L[t-1]+I[t]-FU[t]-pe[t]*(Eq[t]-Eq[t-1])
+  Fe[t]=Y[t]-WB[t]
+  
  
-  w[t]=w[t-1]*(1+What[t-1])
-  p[t]=p[t-1]*(1+phat[t-1])
   
-  omega[t]=w[t]/(beta[t]*p[t])
-  
-  e[t]=nd[t-1]/ns[t-1]  # emplyment explodes
-  
-  ge[t]=(e[t]-e[t-1])/e[t-1]
-  omegaw[t]=omegaw[t-1]+xi*ge[t]
-  What[t]=epsilon1*(omegaw[t]-omega[t])+epsilon2*phat[t-1]+epsilon3*betahat[t]
-  
-  gu[t]=(u[t]-u[t-1])/u[t-1]
-  omegaf[t]=omegaf[t-1]-psi*gu[t]
-  phat[t]=phi1*(omega[t]-omegaf[t])+phi2*(What[t-1])
-  
-  gn[t]=theta0+theta1*e[t-1]
-  nd[t]=Y[t]/beta[t]
-  ns[t]=ns[t-1]*(1+gn[t])
-  erate=nd/ns
-  ######Dynamic simultaneous system#####
-  
-  #gy[t]=(Y[t]-Y[t-1])/Y[t-1]
-  #gk[t]=(h[t]*u[t]/upsilon)-delta
-  #h[t]=h[t-1]+h[t-1]*gamma*(u[t]-un)
-  #u[t]=(1/((1+gk[t-1])*(1-h[t]-alfa1*(1-tau)*(1-pi)-(sigma/(1+gy[t-1])))))*alfa2*upsilonh[t-1]*upsilon
-  
-  #####################################
+  yd[t]=Yd[t]/p[t] #C10
+  UC[t]=W[t]/beta[t] #C40
 }
 
+
+
+
+  
 #Graphs
 par(mfrow=c(1,2), mar=c(3.1, 2.9, 2.5, 1), mgp=c(2, 1, 0), las=0, cex.lab=0.7, cex.axis=0.7, cex.main=0.7, cex.sub=0.7)
 plot( gy, type="l", main="Growth", xlab="t", ylab="gy",col="blue" )
