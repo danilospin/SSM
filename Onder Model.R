@@ -1,5 +1,4 @@
-#Hello
-#Onder Model
+#Onder Model 2020
 
 #Setting the libraries
 library(deSolve)
@@ -150,18 +149,19 @@ dev.off()
 }
 
 
-
-
-############################### DIFFERENTIAL EQUATIONS ###########################3
+############################### DIFFERENTIAL EQUATIONS ###########################
+########################## ONDER MODEL IN CONTINUOUS TIME ######################## 
 
 
 OnderModel <- function (t, y, parms) {
   with(as.list(y), {
     
     #Differential Equations
+    #the interest variables, that define the dynamics of the system are M and g=Ir.
+    dM= M*(b21*(((g*b14)/(1-(b8/(1+M))))-b22))
+    dg= b16+b13*((((g*b14)/(1-(b8/(1+M)))))-b15)+b12*b3-g
+    
     dK=K*(-b16+g)  
-    dM= M*(b21*((((g*K)/(1-b8*(1/(1+M))))/(K/b14))-b22))
-    dg= b16+b13*((((g*K)/(1-b8*(1/(1+M))))/(K/b14))-b15)+b12*b3-g
     da=b3+b4*K+b5*((g*K)/(1-b8*(1/(1+M)))/(a*b19)-b6)
     list(c(dK, dM, dg, da)) })
 
@@ -171,7 +171,7 @@ OnderModel <- function (t, y, parms) {
 yini <- c(K=b18, M=b10, g=b16, a=b2)
 
 #Computing the dynamic equation (ODE)
-times <- seq(from = 0, to = 1000, by = 1)
+times <- seq(from = 0, to = 100, by = 1)
 out <- ode(y = yini, times = times, func =OnderModel ,
            parms = NULL)
 par(mar=c(2, 2, 2, 2))
